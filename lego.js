@@ -4,7 +4,7 @@
  * Сделано задание на звездочку
  * Реализованы методы or и and
  */
-exports.isStar = true;
+exports.isStar = false;
 
 /**
  * Запрос к коллекции
@@ -13,6 +13,11 @@ exports.isStar = true;
  * @returns {Array}
  */
 exports.query = function (collection) {
+    var copyCollection = collection.slice();
+    var constructors = [].slice.call(arguments, 1);
+    console.log(constructors[1](copyCollection));
+    //console.log('-->' + constructors);
+
     return collection;
 };
 
@@ -21,7 +26,25 @@ exports.query = function (collection) {
  * @params {...String}
  */
 exports.select = function () {
-    return;
+    var fields = [].slice.call(arguments);
+    var selectedFields = [];
+
+    return function select(collection) {
+        fields.forEach(function (field) {
+            if (collection[0].hasOwnProperty(field)) {
+                selectedFields.push(field);
+            }
+        });
+
+        return collection.map(function (friend) {
+            var selectedFriend = {};
+            selectedFields.forEach(function (field) {
+                selectedFriend[field] = friend[field]
+            });
+
+            return selectedFriend;
+        });
+    };
 };
 
 /**
@@ -30,9 +53,14 @@ exports.select = function () {
  * @param {Array} values – Доступные значения
  */
 exports.filterIn = function (property, values) {
-    console.info(property, values);
+    //console.info(property, values);
+    var filterValues = [].concat(values);
 
-    return;
+    return function (collection) {
+        if (collection[0].hasOwnProperty(property)) {
+            return filterResult(collection, property, filterValues);
+        }
+    };
 };
 
 /**
@@ -41,7 +69,7 @@ exports.filterIn = function (property, values) {
  * @param {String} order – Порядок сортировки (asc - по возрастанию; desc – по убыванию)
  */
 exports.sortBy = function (property, order) {
-    console.info(property, order);
+    //console.info(property, order);
 
     return;
 };
@@ -52,7 +80,7 @@ exports.sortBy = function (property, order) {
  * @param {Function} formatter – Функция для форматирования
  */
 exports.format = function (property, formatter) {
-    console.info(property, formatter);
+    //console.info(property, formatter);
 
     return;
 };
@@ -62,10 +90,24 @@ exports.format = function (property, formatter) {
  * @param {Number} count – Максимальное количество элементов
  */
 exports.limit = function (count) {
-    console.info(count);
+    //console.info(count);
 
     return;
 };
+
+function filterResult(collection, prop, values) {
+    var filterResult = [];
+
+    collection.forEach(function (friend) {
+        values.forEach(function (value) {
+            if (friend[prop] === value) {
+                return filterResult.push(friend);
+            }
+        })
+    });
+
+    return filterResult;
+}
 
 if (exports.isStar) {
 
