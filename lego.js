@@ -23,29 +23,25 @@ var CONSTRUCTOR_PROCEDURE = [
 exports.query = function (collection) {
     var copyCollection = collection.slice();
     var constructors = [].slice.call(arguments, 1);
-    var selectFunctions = constructors.filter(function (constructor) {
-        return constructor.name === CONSTRUCTOR_PROCEDURE[i];
-    })(copyCollection);
 
-    copyCollection = constructors.filter(function (constructor) {
-        return constructor.name === CONSTRUCTOR_PROCEDURE[0];
-    })[0](copyCollection);
-    performFunc(1);
-    performSelectFunc(selectFunctions, copyCollection);
-    performFunc(3);
-    performFunc(4);
+    for (var i = 0; i < 5; i++) {
+        copyCollection = performFunc(constructors, i, copyCollection);
+    }
 
-    return collection;
+    return copyCollection;
 };
 
-function performFunc(funcs, index, collection) {
-    funcs.filter(function (constructor) {
+function performFunc(constructors, index, collection) {
+    var functions = constructors.filter(function (constructor) {
         return constructor.name === CONSTRUCTOR_PROCEDURE[index];
-    })[0](collection);
-}
+    });
+    var resultCollection = 2;
 
-function performSelectFunc(functions, collections) {
+    functions.forEach(function (func) {
+        resultCollection = func(collection);
+    });
 
+    return resultCollection;
 }
 
 /**
@@ -84,9 +80,9 @@ exports.filterIn = function (property, values) {
     var filterValues = [].concat(values);
 
     return function filterIn(collection) {
-        if (collection[0].hasOwnProperty(property)) {
-            return filterResult(collection, property, filterValues);
-        }
+        return collection.filter(function (friend) {
+            return filterResult(friend[property], filterValues);
+        });
     };
 };
 
@@ -101,11 +97,11 @@ exports.sortBy = function (property, order) {
     return function sortBy(collection) {
         if (collection[0].hasOwnProperty(property)) {
             if (order === 'asc') {
-                collection.sort(function (a, b) {
+                return collection.sort(function (a, b) {
                     return a[property] - b[property];
                 });
             } else {
-                collection.sort(function (a, b) {
+                return collection.sort(function (a, b) {
                     return b[property] - a[property];
                 });
             }
@@ -127,6 +123,8 @@ exports.format = function (property, formatter) {
                 friend[property] =
                     formatter(friend[property]);
             });
+
+            return collection;
         }
     };
 };
@@ -140,21 +138,20 @@ exports.limit = function (count) {
 
     return function limit(collection) {
         collection.splice(count);
+
+        return collection;
     };
 };
 
-function filterResult(collection, prop, values) {
-    var filterResult = [];
-
-    collection.forEach(function (friend) {
-        values.forEach(function (value) {
-            if (friend[prop] === value) {
-                return filterResult.push(friend);
-            }
-        })
+function filterResult(valueOfProperty, values) {
+    var result = false;
+    values.forEach(function (value) {
+        if (value === valueOfProperty) {
+            result = true;
+        }
     });
 
-    return filterResult;
+    return result;
 }
 
 if (exports.isStar) {
