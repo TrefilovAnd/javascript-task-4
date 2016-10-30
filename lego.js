@@ -47,6 +47,7 @@ function performFunc(constructors, index, collection) {
 /**
  * Выбор полей
  * @params {...String}
+ * @returns {Function}
  */
 exports.select = function () {
     var fields = [].slice.call(arguments);
@@ -62,7 +63,7 @@ exports.select = function () {
         return collection.map(function (friend) {
             var selectedFriend = {};
             selectedFields.forEach(function (field) {
-                selectedFriend[field] = friend[field]
+                selectedFriend[field] = friend[field];
             });
 
             return selectedFriend;
@@ -74,6 +75,7 @@ exports.select = function () {
  * Фильтрация поля по массиву значений
  * @param {String} property – Свойство для фильтрации
  * @param {Array} values – Доступные значения
+ * @returns {Function}
  */
 exports.filterIn = function (property, values) {
     console.info(property, values);
@@ -90,6 +92,7 @@ exports.filterIn = function (property, values) {
  * Сортировка коллекции по полю
  * @param {String} property – Свойство для фильтрации
  * @param {String} order – Порядок сортировки (asc - по возрастанию; desc – по убыванию)
+ * @returns {Function}
  */
 exports.sortBy = function (property, order) {
     console.info(property, order);
@@ -100,11 +103,11 @@ exports.sortBy = function (property, order) {
                 return collection.sort(function (a, b) {
                     return a[property] - b[property];
                 });
-            } else {
-                return collection.sort(function (a, b) {
-                    return b[property] - a[property];
-                });
             }
+
+            return collection.sort(function (a, b) {
+                return b[property] - a[property];
+            });
         }
     };
 };
@@ -113,6 +116,7 @@ exports.sortBy = function (property, order) {
  * Форматирование поля
  * @param {String} property – Свойство для фильтрации
  * @param {Function} formatter – Функция для форматирования
+ * @returns {Function}
  */
 exports.format = function (property, formatter) {
     console.info(property, formatter);
@@ -132,6 +136,7 @@ exports.format = function (property, formatter) {
 /**
  * Ограничение количества элементов в коллекции
  * @param {Number} count – Максимальное количество элементов
+ * @returns {Function}
  */
 exports.limit = function (count) {
     console.info(count);
