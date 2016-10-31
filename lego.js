@@ -98,12 +98,10 @@ exports.format = function (property, formatter) {
     console.info(property, formatter);
 
     return function format(collection) {
-        return collection
-            .slice()
-            .map(function (contact) {
-                contact[property] = formatter(contact[property]);
+        return collection.map(function (friend) {
+                friend[property] = formatter(friend[property]);
 
-                return contact;
+                return friend;
             });
     };
 };
