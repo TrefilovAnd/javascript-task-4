@@ -29,7 +29,7 @@ exports.query = function (collection) {
             CONSTRUCTOR_PROCEDURE.indexOf(b.name);
     })
         .forEach(function (func) {
-            copyCollection = queryFunc(copyCollection);
+            copyCollection = func(copyCollection);
         });
     // CONSTRUCTOR_PROCEDURE.forEach(function (funcName) {
     //     copyCollection = performFunc(constructors, funcName, copyCollection);
