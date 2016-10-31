@@ -149,12 +149,11 @@ exports.limit = function (count) {
 };
 
 function getSelectedFriend(friend, selectedFields) {
-    var selectedFriend = {};
-    selectedFields.forEach(function (field) {
-        selectedFriend[field] = friend[field];
-    });
+    return selectedFields.reduce(function (accumulator, field) {
+        accumulator[field] = friend[field];
 
-    return selectedFriend;
+        return accumulator;
+    }, {});
 }
 
 function filterResult(valueOfProperty, values) {
