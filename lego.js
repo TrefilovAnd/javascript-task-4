@@ -86,17 +86,13 @@ exports.sortBy = function (property, order) {
     console.info(property, order);
 
     return function sortBy(collection) {
-        if (collection[0].hasOwnProperty(property)) {
+        return collection.sort(function (a, b) {
             if (order === 'asc') {
-                return collection.sort(function (a, b) {
-                    return a[property] - b[property];
-                });
+                return a[property] - b[property];
             }
 
-            return collection.sort(function (a, b) {
-                return b[property] - a[property];
-            });
-        }
+            return b[property] - a[property];
+        });
     };
 };
 
