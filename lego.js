@@ -99,10 +99,10 @@ exports.format = function (property, formatter) {
 
     return function format(collection) {
         return collection.map(function (friend) {
-                friend[property] = formatter(friend[property]);
+            friend[property] = formatter(friend[property]);
 
-                return friend;
-            });
+            return friend;
+        });
     };
 };
 
