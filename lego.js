@@ -108,10 +108,10 @@ exports.format = function (property, formatter) {
     return function format(collection) {
         return collection.slice()
             .map(function (contact) {
-            contact[property] = formatter(contact[property]);
+                contact[property] = formatter(contact[property]);
 
-            return contact;
-        });
+                return contact;
+            });
     };
 };
 
