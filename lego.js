@@ -66,9 +66,9 @@ exports.select = function () {
             return collection.map(function (friend) {
                 return getSelectedFriend(friend, selectedFields);
             });
-        } else {
-            return collection;
         }
+
+        return collection;
     };
 };
 
