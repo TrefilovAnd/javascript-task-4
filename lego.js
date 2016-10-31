@@ -25,12 +25,12 @@ exports.query = function (collection) {
 
     [].slice.call(arguments, 1)
         .sort(function (a, b) {
-        return CONSTRUCTOR_PROCEDURE.indexOf(a.name) -
-            CONSTRUCTOR_PROCEDURE.indexOf(b.name);
-    })
-        .forEach(function (func) {
-            copyCollection = func(copyCollection);
-        });
+            return CONSTRUCTOR_PROCEDURE.indexOf(a.name) -
+                CONSTRUCTOR_PROCEDURE.indexOf(b.name);
+        })
+            .forEach(function (func) {
+                copyCollection = func(copyCollection);
+            });
 
     return copyCollection;
 };
