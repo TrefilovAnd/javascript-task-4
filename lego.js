@@ -10,8 +10,8 @@ var CONSTRUCTOR_PROCEDURE = [
     'filterIn',
     'sortBy',
     'select',
-    'limit',
-    'format'
+    'format',
+    'limit'
 ];
 
 /**
@@ -52,20 +52,11 @@ function performFunc(constructors, funcName, collection) {
  */
 exports.select = function () {
     var fields = [].slice.call(arguments);
-    var selectedFields = [];
 
     return function select(collection) {
-        fields.forEach(function (field) {
-            if (collection[0].hasOwnProperty(field)) {
-                selectedFields.push(field);
-            }
+        return collection.map(function (friend) {
+            return getSelectedFriend(friend, fields);
         });
-
-        if (selectedFields.length) {
-            return collection.map(function (friend) {
-                return getSelectedFriend(friend, selectedFields);
-            });
-        }
 
         return collection;
     };
@@ -147,12 +138,16 @@ exports.limit = function (count) {
     };
 };
 
-function getSelectedFriend(friend, selectedFields) {
-    return selectedFields.reduce(function (accumulator, field) {
-        accumulator[field] = friend[field];
+function getSelectedFriend(friend, fields) {
+    var selectedFriend = {};
 
-        return accumulator;
-    }, {});
+    fields.forEach(function (field) {
+        if (friend.hasOwnProperty(field)) {
+            selectedFriend[field] = friend[field];
+        }
+    });
+
+    return selectedFriend;
 }
 
 function getFilterResult(valueOfProperty, values) {
