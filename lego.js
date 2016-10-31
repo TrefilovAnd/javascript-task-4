@@ -24,16 +24,16 @@ exports.query = function (collection) {
     var copyCollection = collection.slice();
     var constructors = [].slice.call(arguments, 1);
 
-    for (var i = 0; i < 5; i++) {
-        copyCollection = performFunc(constructors, i, copyCollection);
-    }
+    CONSTRUCTOR_PROCEDURE.forEach(function (funcName) {
+        copyCollection = performFunc(constructors, funcName, copyCollection);
+    });
 
     return copyCollection;
 };
 
-function performFunc(constructors, index, collection) {
+function performFunc(constructors, funcName, collection) {
     var functions = constructors.filter(function (constructor) {
-        return constructor.name === CONSTRUCTOR_PROCEDURE[index];
+        return constructor.name === funcName;
     });
     var resultCollection = collection;
 
@@ -80,11 +80,10 @@ exports.select = function () {
  */
 exports.filterIn = function (property, values) {
     console.info(property, values);
-    var filterValues = [].concat(values);
 
     return function filterIn(collection) {
         return collection.filter(function (friend) {
-            return filterResult(friend[property], filterValues);
+            return filterResult(friend[property], values);
         });
     };
 };
@@ -159,14 +158,7 @@ function getSelectedFriend(friend, selectedFields) {
 }
 
 function filterResult(valueOfProperty, values) {
-    var result = false;
-    values.forEach(function (value) {
-        if (value === valueOfProperty) {
-            result = true;
-        }
-    });
-
-    return result;
+    return values.indexOf(valueOfProperty) > -1;
 }
 
 if (exports.isStar) {
