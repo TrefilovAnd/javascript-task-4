@@ -39,7 +39,7 @@ function performFunc(constructors, index, collection) {
 
     if (functions.length) {
         functions.forEach(function (func) {
-            resultCollection = func(collection);
+            resultCollection = func(resultCollection);
         });
     }
 
