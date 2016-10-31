@@ -10,8 +10,8 @@ var CONSTRUCTOR_PROCEDURE = [
     'filterIn',
     'sortBy',
     'select',
-    'format',
-    'limit'
+    'limit',
+    'format'
 ];
 
 /**
@@ -36,7 +36,6 @@ function performFunc(constructors, funcName, collection) {
         return constructor.name === funcName;
     });
     var resultCollection = collection;
-
     if (functions.length) {
         functions.forEach(function (func) {
             resultCollection = func(resultCollection);
@@ -83,7 +82,7 @@ exports.filterIn = function (property, values) {
 
     return function filterIn(collection) {
         return collection.filter(function (friend) {
-            return filterResult(friend[property], values);
+            return getFilterResult(friend[property], values);
         });
     };
 };
@@ -156,7 +155,7 @@ function getSelectedFriend(friend, selectedFields) {
     }, {});
 }
 
-function filterResult(valueOfProperty, values) {
+function getFilterResult(valueOfProperty, values) {
     return values.indexOf(valueOfProperty) > -1;
 }
 
