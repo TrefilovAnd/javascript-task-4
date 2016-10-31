@@ -57,8 +57,6 @@ exports.select = function () {
         return collection.map(function (friend) {
             return getSelectedFriend(friend, fields);
         });
-
-        return collection;
     };
 };
 
