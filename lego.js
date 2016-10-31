@@ -31,9 +31,6 @@ exports.query = function (collection) {
         .forEach(function (func) {
             copyCollection = func(copyCollection);
         });
-    // CONSTRUCTOR_PROCEDURE.forEach(function (funcName) {
-    //     copyCollection = performFunc(constructors, funcName, copyCollection);
-    // });
 
     return copyCollection;
 };
@@ -134,7 +131,7 @@ function getSelectedFriend(friend, fields) {
 }
 
 function getFilterResult(valueOfProperty, values) {
-    return values.indexOf(valueOfProperty) > -1;
+    return values.indexOf(valueOfProperty) !== -1;
 }
 
 if (exports.isStar) {
