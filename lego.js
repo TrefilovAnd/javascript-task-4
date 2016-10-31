@@ -21,7 +21,9 @@ var CONSTRUCTOR_PROCEDURE = [
  * @returns {Array}
  */
 exports.query = function (collection) {
-    var copyCollection = collection.slice();
+    var copyCollection = collection.map(function (friend) {
+        return Object.assign({}, friend);
+    });
 
     [].slice.call(arguments, 1)
         .sort(function (a, b) {
