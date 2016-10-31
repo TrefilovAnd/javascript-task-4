@@ -41,6 +41,8 @@ function performFunc(constructors, funcName, collection) {
             return func(acc, collection);
         }, collection);
     }
+
+    return collection;
 }
 
 /**
