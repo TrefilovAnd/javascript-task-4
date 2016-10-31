@@ -128,9 +128,9 @@ exports.format = function (property, formatter) {
                 friend[property] =
                     formatter(friend[property]);
             });
-
-            return collection;
         }
+
+        return collection
     };
 };
 
