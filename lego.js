@@ -47,7 +47,13 @@ exports.select = function () {
 
     return function select(collection) {
         return collection.slice().map(function (friend) {
-            return getSelectedFriend(friend, fields);
+            return fields.reduce(function (accumulator, field) {
+                if (friend.hasOwnProperty(field)) {
+                    accumulator[field] = friend[field];
+                }
+
+                return accumulator;
+            }, {});
         });
     };
 };
