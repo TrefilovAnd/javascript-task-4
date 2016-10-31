@@ -106,14 +106,12 @@ exports.format = function (property, formatter) {
     console.info(property, formatter);
 
     return function format(collection) {
-        if (collection[0].hasOwnProperty(property)) {
-            collection.forEach(function (friend) {
-                friend[property] =
-                    formatter(friend[property]);
-            });
-        }
+        return collection.slice()
+            .map(function (contact) {
+            contact[property] = formatter(contact[property]);
 
-        return collection;
+            return contact;
+        });
     };
 };
 
@@ -126,9 +124,7 @@ exports.limit = function (count) {
     console.info(count);
 
     return function limit(collection) {
-        collection.splice(count);
-
-        return collection;
+        return collection.splice(0, count);
     };
 };
 
