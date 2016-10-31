@@ -46,7 +46,7 @@ exports.select = function () {
     var fields = [].slice.call(arguments);
 
     return function select(collection) {
-        return collection.map(function (friend) {
+        return collection.slice().map(function (friend) {
             return getSelectedFriend(friend, fields);
         });
     };
@@ -62,7 +62,7 @@ exports.filterIn = function (property, values) {
     console.info(property, values);
 
     return function filterIn(collection) {
-        return collection.filter(function (friend) {
+        return collection.slice().filter(function (friend) {
             return getFilterResult(friend[property], values);
         });
     };
@@ -78,7 +78,7 @@ exports.sortBy = function (property, order) {
     console.info(property, order);
 
     return function sortBy(collection) {
-        return collection.sort(function (a, b) {
+        return collection.slice().sort(function (a, b) {
             if (order === 'asc') {
                 return a[property] - b[property];
             }
@@ -98,7 +98,7 @@ exports.format = function (property, formatter) {
     console.info(property, formatter);
 
     return function format(collection) {
-        return collection.map(function (friend) {
+        return collection.slice().map(function (friend) {
             friend[property] = formatter(friend[property]);
 
             return friend;
