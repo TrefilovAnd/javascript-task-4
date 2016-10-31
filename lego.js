@@ -24,26 +24,19 @@ exports.query = function (collection) {
     var copyCollection = collection.slice();
     var constructors = [].slice.call(arguments, 1);
 
-    CONSTRUCTOR_PROCEDURE.forEach(function (funcName) {
-        copyCollection = performFunc(constructors, funcName, copyCollection);
-    });
+    constructors.sort(function (a, b) {
+        return CONSTRUCTOR_PROCEDURE.indexOf(a.name) -
+            CONSTRUCTOR_PROCEDURE.indexOf(b.name);
+    })
+        .forEach(function (func) {
+            copyCollection = queryFunc(copyCollection);
+        });
+    // CONSTRUCTOR_PROCEDURE.forEach(function (funcName) {
+    //     copyCollection = performFunc(constructors, funcName, copyCollection);
+    // });
 
     return copyCollection;
 };
-
-function performFunc(constructors, funcName, collection) {
-    var functions = constructors.filter(function (constructor) {
-        return constructor.name === funcName;
-    });
-
-    if (functions.length) {
-        return functions.reduce(function (acc, func) {
-            return func(acc, collection);
-        }, collection);
-    }
-
-    return collection;
-}
 
 /**
  * Выбор полей
