@@ -62,14 +62,13 @@ exports.select = function () {
             }
         });
 
-        return collection.map(function (friend) {
-            var selectedFriend = {};
-            selectedFields.forEach(function (field) {
-                selectedFriend[field] = friend[field];
+        if (selectedFields.length) {
+            return collection.map(function (friend) {
+                return getSelectedFriend(friend, selectedFields);
             });
-
-            return selectedFriend;
-        });
+        } else {
+            return collection;
+        }
     };
 };
 
@@ -149,6 +148,15 @@ exports.limit = function (count) {
         return collection;
     };
 };
+
+function getSelectedFriend(friend, selectedFields) {
+    var selectedFriend = {};
+    selectedFields.forEach(function (field) {
+        selectedFriend[field] = friend[field];
+    });
+
+    return selectedFriend;
+}
 
 function filterResult(valueOfProperty, values) {
     var result = false;
