@@ -22,9 +22,9 @@ var CONSTRUCTOR_PROCEDURE = [
  */
 exports.query = function (collection) {
     var copyCollection = collection.slice();
-    var constructors = [].slice.call(arguments, 1);
 
-    constructors.sort(function (a, b) {
+    [].slice.call(arguments, 1)
+        .sort(function (a, b) {
         return CONSTRUCTOR_PROCEDURE.indexOf(a.name) -
             CONSTRUCTOR_PROCEDURE.indexOf(b.name);
     })
@@ -96,7 +96,8 @@ exports.format = function (property, formatter) {
     console.info(property, formatter);
 
     return function format(collection) {
-        return collection.slice()
+        return collection
+            .slice()
             .map(function (contact) {
                 contact[property] = formatter(contact[property]);
 
