@@ -35,11 +35,13 @@ function performFunc(constructors, index, collection) {
     var functions = constructors.filter(function (constructor) {
         return constructor.name === CONSTRUCTOR_PROCEDURE[index];
     });
-    var resultCollection = 2;
+    var resultCollection = collection;
 
-    functions.forEach(function (func) {
-        resultCollection = func(collection);
-    });
+    if (functions.length) {
+        functions.forEach(function (func) {
+            resultCollection = func(collection);
+        });
+    }
 
     return resultCollection;
 }
