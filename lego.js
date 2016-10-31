@@ -125,18 +125,6 @@ exports.limit = function (count) {
     };
 };
 
-function getSelectedFriend(friend, fields) {
-    var selectedFriend = {};
-
-    fields.forEach(function (field) {
-        if (friend.hasOwnProperty(field)) {
-            selectedFriend[field] = friend[field];
-        }
-    });
-
-    return selectedFriend;
-}
-
 function getFilterResult(valueOfProperty, values) {
     return values.indexOf(valueOfProperty) !== -1;
 }
