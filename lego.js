@@ -130,7 +130,7 @@ exports.format = function (property, formatter) {
             });
         }
 
-        return collection
+        return collection;
     };
 };
 
