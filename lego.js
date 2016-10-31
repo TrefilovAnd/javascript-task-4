@@ -35,14 +35,12 @@ function performFunc(constructors, funcName, collection) {
     var functions = constructors.filter(function (constructor) {
         return constructor.name === funcName;
     });
-    var resultCollection = collection;
-    if (functions.length) {
-        functions.forEach(function (func) {
-            resultCollection = func(resultCollection);
-        });
-    }
 
-    return resultCollection;
+    if (functions.length) {
+        return functions.reduce(function (acc, func) {
+            return func(acc, collection);
+        }, collection);
+    }
 }
 
 /**
