@@ -6,7 +6,7 @@
  */
 exports.isStar = false;
 
-var CONSTRUCTOR_PROCEDURE = [
+var OPERATORS = [
     'filterIn',
     'sortBy',
     'select',
@@ -21,20 +21,21 @@ var CONSTRUCTOR_PROCEDURE = [
  * @returns {Array}
  */
 exports.query = function (collection) {
-    var copyCollection = collection.map(function (friend) {
+    var collectionCopy = collection.map(function (friend) {
         return Object.assign({}, friend);
     });
 
-    [].slice.call(arguments, 1)
+    Array.prototype.slice
+        .call(arguments, 1)
         .sort(function (a, b) {
-            return CONSTRUCTOR_PROCEDURE.indexOf(a.name) -
-                CONSTRUCTOR_PROCEDURE.indexOf(b.name);
+            return OPERATORS.indexOf(a.name) -
+                OPERATORS.indexOf(b.name);
         })
-            .forEach(function (func) {
-                copyCollection = func(copyCollection);
-            });
+        .forEach(function (func) {
+            collectionCopy = func(collectionCopy);
+        });
 
-    return copyCollection;
+    return collectionCopy;
 };
 
 /**
@@ -46,10 +47,10 @@ exports.select = function () {
     var fields = [].slice.call(arguments);
 
     return function select(collection) {
-        return collection.slice().map(function (friend) {
+        return collection.map(function (isValueInArray) {
             return fields.reduce(function (accumulator, field) {
-                if (friend.hasOwnProperty(field)) {
-                    accumulator[field] = friend[field];
+                if (isValueInArray.hasOwnProperty(field)) {
+                    accumulator[field] = isValueInArray[field];
                 }
 
                 return accumulator;
@@ -68,8 +69,8 @@ exports.filterIn = function (property, values) {
     console.info(property, values);
 
     return function filterIn(collection) {
-        return collection.slice().filter(function (friend) {
-            return getFilterResult(friend[property], values);
+        return collection.slice().filter(function (isValueInArray) {
+            return getFilterResult(isValueInArray[property], values);
         });
     };
 };
@@ -85,11 +86,9 @@ exports.sortBy = function (property, order) {
 
     return function sortBy(collection) {
         return collection.slice().sort(function (a, b) {
-            if (order === 'asc') {
-                return a[property] > b[property];
-            }
-
-            return b[property] > a[property];
+            return order === 'asc'
+                ? a[property] > b[property]
+                : b[property] > a[property];
         });
     };
 };
@@ -104,10 +103,10 @@ exports.format = function (property, formatter) {
     console.info(property, formatter);
 
     return function format(collection) {
-        return collection.slice().map(function (friend) {
-            friend[property] = formatter(friend[property]);
+        return collection.slice().map(function (isValueInArray) {
+            isValueInArray[property] = formatter(isValueInArray[property]);
 
-            return friend;
+            return isValueInArray;
         });
     };
 };
