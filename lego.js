@@ -25,14 +25,13 @@ exports.query = function (collection) {
         return Object.assign({}, friend);
     });
 
-    Array.prototype.slice
-        .call(arguments, 1)
+    Array.prototype.slice.call(arguments, 1)
         .sort(function (a, b) {
             return OPERATORS.indexOf(a.name) -
                 OPERATORS.indexOf(b.name);
         })
-        .forEach(function (func) {
-            collectionCopy = func(collectionCopy);
+        .forEach(function (operator) {
+            collectionCopy = operator(collectionCopy);
         });
 
     return collectionCopy;
@@ -47,10 +46,10 @@ exports.select = function () {
     var fields = [].slice.call(arguments);
 
     return function select(collection) {
-        return collection.map(function (isValueInArray) {
+        return collection.map(function (record) {
             return fields.reduce(function (accumulator, field) {
-                if (isValueInArray.hasOwnProperty(field)) {
-                    accumulator[field] = isValueInArray[field];
+                if (record.hasOwnProperty(field)) {
+                    accumulator[field] = record[field];
                 }
 
                 return accumulator;
@@ -69,8 +68,8 @@ exports.filterIn = function (property, values) {
     console.info(property, values);
 
     return function filterIn(collection) {
-        return collection.slice().filter(function (isValueInArray) {
-            return getFilterResult(isValueInArray[property], values);
+        return collection.filter(function (record) {
+            return values.indexOf(record[property]) !== -1;
         });
     };
 };
@@ -85,7 +84,11 @@ exports.sortBy = function (property, order) {
     console.info(property, order);
 
     return function sortBy(collection) {
-        return collection.slice().sort(function (a, b) {
+        var collectionCopy = collection.map(function (record) {
+            return Object.assign({}, record);
+        });
+
+        return collectionCopy.sort(function (a, b) {
             return order === 'asc'
                 ? a[property] > b[property]
                 : b[property] > a[property];
@@ -103,10 +106,10 @@ exports.format = function (property, formatter) {
     console.info(property, formatter);
 
     return function format(collection) {
-        return collection.slice().map(function (isValueInArray) {
-            isValueInArray[property] = formatter(isValueInArray[property]);
+        return collection.map(function (record) {
+            record[property] = formatter(record[property]);
 
-            return isValueInArray;
+            return record;
         });
     };
 };
@@ -120,13 +123,13 @@ exports.limit = function (count) {
     console.info(count);
 
     return function limit(collection) {
-        return collection.splice(0, count);
+        var collectionCopy = collection.map(function (record) {
+            return Object.assign({}, record);
+        });
+
+        return collectionCopy.splice(0, count);
     };
 };
-
-function getFilterResult(valueOfProperty, values) {
-    return values.indexOf(valueOfProperty) !== -1;
-}
 
 if (exports.isStar) {
 
