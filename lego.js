@@ -21,11 +21,10 @@ var OPERATORS = [
  * @returns {Array}
  */
 exports.query = function (collection) {
-    var collectionCopy = collection.map(function (friend) {
-        return Object.assign({}, friend);
-    });
+    var collectionCopy = copyCollection(collection);
 
-    Array.prototype.slice.call(arguments, 1)
+    Array.prototype.slice
+        .call(arguments, 1)
         .sort(function (a, b) {
             return OPERATORS.indexOf(a.name) -
                 OPERATORS.indexOf(b.name);
@@ -84,9 +83,7 @@ exports.sortBy = function (property, order) {
     console.info(property, order);
 
     return function sortBy(collection) {
-        var collectionCopy = collection.map(function (record) {
-            return Object.assign({}, record);
-        });
+        var collectionCopy = copyCollection(collection);
 
         return collectionCopy.sort(function (a, b) {
             return order === 'asc'
@@ -123,13 +120,17 @@ exports.limit = function (count) {
     console.info(count);
 
     return function limit(collection) {
-        var collectionCopy = collection.map(function (record) {
-            return Object.assign({}, record);
-        });
+        var collectionCopy = copyCollection(collection);
 
         return collectionCopy.splice(0, count);
     };
 };
+
+function copyCollection(collection) {
+    return collection.map(function (record) {
+        return Object.assign({}, record);
+    });
+}
 
 if (exports.isStar) {
 
